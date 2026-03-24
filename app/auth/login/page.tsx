@@ -1,7 +1,7 @@
 "use client";
 
 import { useSearchParams, useRouter } from "next/navigation";
-import React, { useState } from "react";
+import React, { useState, Suspense } from "react";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -31,7 +31,9 @@ export default function LoginPage() {
     router.replace(next);
   }
 
-  return <div></div>;
+  return <Suspense fallback={<div>Loading login form...</div>}>
+    <div></div>
+  </Suspense>;
 }
 
 {

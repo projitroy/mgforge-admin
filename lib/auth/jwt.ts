@@ -1,27 +1,37 @@
-import jwt from 'jsonwebtoken';
+import jwt, { Secret } from "jsonwebtoken";
 
-export function generateJWTToken(mobile: String, password: String) {
-    const payload = {
-        mobile,
-        password
-    };
-
-    const secret = process.env.JWT_SECRET;
-    const options = {
-        expiresIn: '1d', // Token expires in 1 day
-    };
-
-    return jwt.sign(payload, secret, options);
-
+interface UserPayload {
+  mobile: string;
+  password: string;
 }
 
-export function verifyToken(token: String) {
-    const secret = process.env.JWT_SECRET;
-    try {
-        const decodedPayload = jwt.verify(token, secret);
-        return decodedPayload;
-    } catch (err: any) {
-        console.error('JWT verification failed:', err.message);
-        return null;
-    }
+const secret: Secret = process.env.JWT_SECRET!;
+
+if (!secret) {
+  throw new Error('JWT_SECRET environment variable is not defined');
+}
+
+export function generateJWTToken(mobile: string, password: string): string {
+
+  const payload: UserPayload = {
+    mobile,
+    password,
+  };
+
+  const options = {
+    expiresIn: "1d",
+    algorithm: 'HS256'
+  } as const;
+
+  return jwt.sign(payload, secret, options);
+}
+
+export function verifyToken(token: string) {
+  try {
+    const decodedPayload = jwt.verify(token, secret);
+    return decodedPayload;
+  } catch (err: any) {
+    console.error("JWT verification failed:", err.message);
+    return null;
+  }
 }
