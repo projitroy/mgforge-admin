@@ -32,7 +32,9 @@ export default function LoginPage() {
   }
 
   return <Suspense fallback={<div>Loading login form...</div>}>
-    <div></div>
+    <div className="h-screen w-screen flex items-center justify-center">
+      
+    </div>
   </Suspense>;
 }
 
