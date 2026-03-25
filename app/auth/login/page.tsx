@@ -1,25 +1,32 @@
-"use client";
+'use client';
 
 import { useSearchParams, useRouter } from "next/navigation";
-import React, { useState, Suspense } from "react";
+import React, { useState, Suspense, useEffect } from "react";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 
-export default function LoginPage() {
+function LoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const next = searchParams.get("redirect") || "/home";
 
-  const [mobile, setMobile] = useState("");
+  const [userId, setUserId] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
+  const [mounted, setMounted] = useState(false);
 
-  async function onSubmit(e: React.SubmitEvent) {
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setError(null);
 
     const res = await fetch("/api/auth/login", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ mobile, password }),
+      body: JSON.stringify({ userId, password }),
     });
 
     if (!res.ok) {
@@ -27,39 +34,52 @@ export default function LoginPage() {
       return;
     }
 
-    // After cookie is set, navigate to the intended destination
     router.replace(next);
   }
 
-  return <Suspense fallback={<div>Loading login form...</div>}>
-    <div className="h-screen w-screen flex items-center justify-center">
-      
+  if (!mounted) {
+    return (
+      <div className="h-screen w-screen grid grid-cols-2 items-center justify-center">
+        <div className="col-span-1 flex items-center justify-center" />
+        <div className="col-span-1 h-full flex items-center justify-center bg-gray-400/50" />
+      </div>
+    );
+  }
+
+  return (
+    <div className="h-screen w-screen grid grid-cols-2 items-center justify-center">
+      <div className="col-span-1 flex items-center justify-center">
+        <img src="/logo.jpg" alt="Logo" />
+      </div>
+      <div className="col-span-1 h-full flex items-center justify-center bg-gray-400/50">
+        <form onSubmit={onSubmit} className="w-2/5 gap-4 flex flex-col items-center justify-center">
+          <span className="text-gray-800 text-xl font-bold">Sign in</span>
+          <span className="text-gray-600 text-lg">Enter your credentials below</span>
+          <Input
+            placeholder="Enter your username"
+            value={userId}
+            onChange={(e) => setUserId(e.target.value)}
+            className="bg-white w-full h-10"
+          />
+          <Input
+            placeholder="Enter your password"
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className="bg-white h-10"
+          />
+          {error && <p className="text-red-500">{error}</p>}
+          <Button type="submit" className="w-full h-12 bg-gray-800">Sign in</Button>
+        </form>
+      </div>
     </div>
-  </Suspense>;
+  );
 }
 
-{
-  /* <div style={{ maxWidth: 360, margin: "40px auto" }}>
-      <h1>Login</h1>
-
-      <form onSubmit={onSubmit}>
-        <input
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          style={{ display: "block", width: "100%", margin: "8px 0" }}
-        />
-        <input
-          placeholder="Password"
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          style={{ display: "block", width: "100%", margin: "8px 0" }}
-        />
-
-        {error && <p style={{ color: "red" }}>{error}</p>}
-
-        <button type="submit">Sign in</button>
-      </form>
-    </div> */
+export default function LoginPage() {
+  return (
+    <Suspense fallback={<div className="h-screen w-screen flex items-center justify-center">Loading...</div>}>
+      <LoginForm />
+    </Suspense>
+  );
 }

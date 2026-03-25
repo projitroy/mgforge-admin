@@ -3,13 +3,13 @@ import { generateJWTToken } from "@/lib/auth/jwt";
 
 export async function POST(req: Request) {
     const body = await req.json();
-    const { mobile, password } = body;
+    const { userId, password } = body;
 
-    if (!mobile || !password) {
+    if (!userId || !password) {
         return NextResponse.json({ message: "Invalid credentials" }, { status: 401 });
     }
 
-    const sessionToken = generateJWTToken(mobile, password);
+    const sessionToken = generateJWTToken(userId, password);
 
     const res = NextResponse.json({ ok: true });
 
