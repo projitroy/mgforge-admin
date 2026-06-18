@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { generateJWTToken } from "@/lib/auth/jwt";
+import { generateJWTToken } from "@/src/lib/auth/jwt";
 
 export async function POST(req: Request) {
     const body = await req.json();

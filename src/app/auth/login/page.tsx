@@ -2,8 +2,8 @@
 
 import { useSearchParams, useRouter } from "next/navigation";
 import React, { useState, Suspense, useEffect } from "react";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
+import { Input } from "@/src/components/ui/input";
+import { Button } from "@/src/components/ui/button";
 
 function LoginForm() {
   const router = useRouter();
@@ -13,11 +13,6 @@ function LoginForm() {
   const [userId, setUserId] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -35,15 +30,6 @@ function LoginForm() {
     }
 
     router.replace(next);
-  }
-
-  if (!mounted) {
-    return (
-      <div className="h-screen w-screen grid grid-cols-2 items-center justify-center">
-        <div className="col-span-1 flex items-center justify-center" />
-        <div className="col-span-1 h-full flex items-center justify-center bg-gray-400/50" />
-      </div>
-    );
   }
 
   return (

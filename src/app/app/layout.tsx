@@ -1,4 +1,4 @@
-import { verifyToken } from "@/lib/auth/jwt";
+import { verifyToken } from "@/src/lib/auth/jwt";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
