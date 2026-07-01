@@ -1,4 +1,4 @@
-export type Role = "1" | "2" | "3" | "4" | "5";
+export type Role = "SUPERADMIN" | "TENANT_ADMIN" | "ADMIN" | "COACH" | "USER";
 
 export type Permission =
   | "tenant.manage"
@@ -13,7 +13,7 @@ export type Permission =
   | "comment.create";
 
 export const rolePermissions: Record<Role, Permission[]> = {
-  "1": [
+  "SUPERADMIN": [
     "tenant.manage",
     "user.view",
     "user.create",
@@ -25,7 +25,7 @@ export const rolePermissions: Record<Role, Permission[]> = {
     "progress.view",
     "comment.create",
   ],
-  "2": [
+  "TENANT_ADMIN": [
     "user.view",
     "user.create",
     "user.update",
@@ -35,7 +35,7 @@ export const rolePermissions: Record<Role, Permission[]> = {
     "progress.view",
     "comment.create",
   ],
-  "3": [
+  "ADMIN": [
     "user.view",
     "user.create",
     "coach.assignClient",
@@ -44,8 +44,8 @@ export const rolePermissions: Record<Role, Permission[]> = {
     "progress.view",
     "comment.create",
   ],
-  "4": ["plan.create", "plan.update", "progress.view", "comment.create"],
-  "5": [],
+  "COACH": ["plan.create", "plan.update", "progress.view", "comment.create"],
+  "USER": [],
 };
 
 export function getPermissionsForRole(roles: Role[]): Permission[] {

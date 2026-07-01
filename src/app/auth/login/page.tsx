@@ -1,14 +1,15 @@
 'use client';
 
 import { useSearchParams, useRouter } from "next/navigation";
-import React, { useState, Suspense, useEffect } from "react";
+import React, { useState, Suspense } from "react";
 import { Input } from "@/src/components/ui/input";
 import { Button } from "@/src/components/ui/button";
+import { api } from "@/src/lib/api";
 
 function LoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const next = searchParams.get("redirect") || "/home";
+  const next = searchParams.get("redirect") || "/";
 
   const [userId, setUserId] = useState("");
   const [password, setPassword] = useState("");
@@ -18,18 +19,17 @@ function LoginForm() {
     e.preventDefault();
     setError(null);
 
-    const res = await fetch("/api/auth/login", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ userId, password }),
-    });
+    try {
+      const res = await api.post<{ ok: boolean }>("/admin/auth/login", {
+        data: { mobile: userId, password },
+        credentials: "include",
+      });
 
-    if (!res.ok) {
+      router.replace(next);
+    } catch (err) {
+      console.error(err);
       setError("Login failed");
-      return;
     }
-
-    router.replace(next);
   }
 
   return (

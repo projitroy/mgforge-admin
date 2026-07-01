@@ -12,7 +12,7 @@ import {userAuth} from "@/src/context/AuthContext";
 
 const menuItems = [
   { label: "Dashboard", href: "/dashboard", permission: null },
-  { label: "Users", href: "/users", permission: "view_users" },
+  { label: "Users", href: "/users", permission: "user.view" },
   { label: "Settings", href: "/settings", permission: "manage_settings" },
 ] as const;
 

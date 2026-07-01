@@ -3,7 +3,7 @@
 import { createContext, useContext, useMemo } from "react";
 import { getPermissionsForRole, Role, Permission } from "../lib/rbac";
 
-type AuthUser = {
+export type AuthUser = {
     id: string;
     tenantId: string;
     roles: Role[];
