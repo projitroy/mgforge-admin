@@ -8,7 +8,7 @@ import {
   SidebarHeader,
 } from "@/src/components/ui/sidebar";
 import Link from "next/link";
-import {userAuth} from "@/src/context/AuthContext";
+import { userAuth } from "@/src/context/AuthContext";
 
 const menuItems = [
   { label: "Dashboard", href: "/dashboard", permission: null },
@@ -18,7 +18,7 @@ const menuItems = [
 
 export function AppSidebar() {
 
-  const {can} = userAuth();
+  const { can } = userAuth();
 
   return (
     <Sidebar>

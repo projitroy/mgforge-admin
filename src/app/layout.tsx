@@ -21,7 +21,6 @@ export default async function RootLayout({
 }>) {
   const cookieStore = await cookies();
   const session = cookieStore.get("access_token")?.value;
-  const isLoggedIn = Boolean(session);
 
   let user = null;
 
@@ -36,6 +35,8 @@ export default async function RootLayout({
       };
     }
   }
+
+  const isLoggedIn = Boolean(user);
 
   return (
     <html lang="en" className={cn("font-sans", geist.variable)}>
