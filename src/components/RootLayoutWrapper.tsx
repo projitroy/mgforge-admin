@@ -4,6 +4,7 @@ import { ReactNode } from "react"
 import { AuthProvider, AuthUser } from "@/src/context/AuthContext"
 import { SidebarProvider, SidebarTrigger } from "@/src/components/ui/sidebar"
 import { AppSidebar } from "@/src/components/AppSideBar"
+import { TooltipProvider } from "./ui/tooltip"
 
 
 
@@ -22,6 +23,7 @@ export function RootLayoutWrapper({
 
   return (
     <AuthProvider user={user}>
+      <TooltipProvider>
       {isLoggedIn ? (
         <SidebarProvider>
           <AppSidebar />
@@ -31,6 +33,7 @@ export function RootLayoutWrapper({
           </main>
         </SidebarProvider>
       ) : (children)}
+      </TooltipProvider>
     </AuthProvider>
   )
 }

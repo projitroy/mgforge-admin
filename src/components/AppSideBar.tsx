@@ -1,38 +1,57 @@
 'use client';
 
 import {
+  useSidebar,
   Sidebar,
   SidebarContent,
   SidebarFooter,
-  SidebarGroup,
+  SidebarRail,
   SidebarHeader,
 } from "@/src/components/ui/sidebar";
-import Link from "next/link";
+import { NavMain } from "@/src/components/sidebar/NavMain";
+import { NavUser } from "@/src/components/sidebar/NavUser";
+import { TeamSwitcher } from "@/src/components/sidebar/TeamSwitch";
 import { userAuth } from "@/src/context/AuthContext";
+import { LayoutDashboard, Settings, Users, FolderDot, ChevronDown, User2, Home, GalleryVerticalEnd } from "lucide-react"
 
 const menuItems = [
-  { label: "Dashboard", href: "/dashboard", permission: null },
-  { label: "Users", href: "/users", permission: "user.view" },
-  { label: "Settings", href: "/settings", permission: "manage_settings" },
-] as const;
+  { title: "Dashboard", href: "/dashboard", permission: null, icon: LayoutDashboard },
+  { title: "Tenants", href: "/tenants", permission: "tenant.manage", icon: FolderDot },
+  { title: "Users", href: "/users", permission: "user.view", icon: Users, childrens: [] },
+  { title: "Settings", href: "/settings", permission: "manage_settings", icon: Settings },
+];
 
-export function AppSidebar() {
+const teams = [
+  {
+    name: "Acme Inc",
+    logo: GalleryVerticalEnd,
+    plan: "Enterprise",
+  },
+];
+
+const user = {
+  name: "CN",
+  email: " ",
+  avatar: ""
+};
+
+export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 
   const { can } = userAuth();
+  const { open } = useSidebar();
 
   return (
-    <Sidebar>
-      <SidebarHeader />
+    <Sidebar collapsible="icon" {...props}>
+      <SidebarHeader>
+        <TeamSwitcher teams={teams} />
+      </SidebarHeader>
       <SidebarContent>
-        <SidebarGroup />
-        {menuItems.filter(item => !item.permission || can(item.permission as any)).map((item) => (
-          <Link key={item.href} href={item.href}>
-            {item.label}
-          </Link>
-        ))}
-        <SidebarGroup />
+        <NavMain items={menuItems} />
       </SidebarContent>
-      <SidebarFooter />
+      <SidebarFooter>
+        <NavUser user={user} />
+      </SidebarFooter>
+      <SidebarRail />
     </Sidebar>
   )
 }
